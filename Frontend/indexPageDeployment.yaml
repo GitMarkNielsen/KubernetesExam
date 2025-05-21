@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-html-page-deployment
+  labels:
+    app: my-html-page
+spec:
+  replicas: 1 # You can increase this for more pods
+  selector:
+    matchLabels:
+      app: my-html-page
+  template:
+    metadata:
+      labels:
+        app: my-html-page
+    spec:
+      containers:
+      - name: my-html-page-container
+        image: dockermarknielsen/kub8examsimpel:v1 
+        ports:
+        - containerPort: 80
