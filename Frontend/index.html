@@ -148,30 +148,43 @@
     <script>
         $(document).ready(function () {
             function loadProducts() {
-
-                const data = ["Way of kings", "Words of radiance"];
-
                 var productContainer = $('#product-container');
                 productContainer.empty(); // Clear any existing content
-                //Trouble with database and other stuff means im making it this simple. Sue me.
-                data.forEach(element => {
-                    console.log(element);
-                var productCard = $('<div class="product-card"></div>');
-                var title = $('<h3>' + element + '</h3>');
+                fetch('http://localhost:31252/api/products')
+                    .then(response => {
+                        if (!response.ok) {
+                            // If the HTTP response status is not 2xx, throw an error
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json(); // Parse the JSON response
+                    })
+                    .then(data => {
+                        // 'data' will be the array ["Way of kings", "Words of Radiance", "Oathbringer"]
+                        if (data && data.length > 0) {
+                            data.forEach(element => {
+                                console.log(element);
+                                var productCard = $('<div class="product-card"></div>');
+                                var title = $('<h3>' + element + '</h3>');
 
-                productCard.append(title);
-                productContainer.append(productCard);
-                 });
-            };
+                                productCard.append(title);
+                                productContainer.append(productCard);
+                            });
+                        } else {
+                            productContainer.append('<p>No products found from backend.</p>');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                        productContainer.append('<p>Failed to load products: ' + error.message + '</p>');
+                    });
+                // Re-attach the event listener for the newly added buttons
+                $('.add-to-cart').off('click').on('click', function () {
+                    var productName = $(this).data('product-name');
+                    $('#cart-notification').text(productName + ' added to cart!').fadeIn(300).delay(1500).fadeOut(300);
+                    // In a real application, you would handle adding the product to a cart data structure here (likely sending data to the backend).
+                });
 
-            // Re-attach the event listener for the newly added buttons
-            $('.add-to-cart').off('click').on('click', function () {
-                var productName = $(this).data('product-name');
-                $('#cart-notification').text(productName + ' added to cart!').fadeIn(300).delay(1500).fadeOut(300);
-                // In a real application, you would handle adding the product to a cart data structure here (likely sending data to the backend).
-            });
-
-
+            }
 
 
 

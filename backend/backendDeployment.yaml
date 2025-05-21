@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-node-backend-deployment
+  labels:
+    app: my-node-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-node-backend
+  template:
+    metadata:
+      labels:
+        app: my-node-backend
+    spec:
+      containers:
+      - name: my-node-backend-container
+        image: dockermarknielsen/backend:latest 
+        ports:
+        - containerPort: 5000 # Matches the port your Node.js app listens on

@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: my-html-page-container
-        image: dockermarknielsen/kub8examsimpel:v1 
+        image: dockermarknielsen/frontend:latest 
         ports:
         - containerPort: 80
